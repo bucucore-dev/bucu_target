@@ -1,0 +1,287 @@
+/* ==========================================================================
+   BUCU Target System — Signature BUCU Purple Crystal Glassmorphism
+   ========================================================================== */
+
+:root {
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Outfit', sans-serif;
+
+    /* BUCU Core Purple Palette */
+    --bucu-purple:       #a855f7;
+    --bucu-purple-dim:   #7c3aed;
+    --bucu-purple-glow:  rgba(168, 85, 247, 0.45);
+    --bucu-violet:       #8b5cf6;
+    --bucu-fuchsia:      #d946ef;
+    --bucu-fuchsia-glow: rgba(217, 70, 239, 0.30);
+    --bucu-emerald:      #10b981;
+    --bucu-emerald-glow: rgba(16, 185, 129, 0.40);
+
+    /* Glass surfaces — transparent purple, zero black */
+    --bg-menu:       rgba(60, 20, 120, 0.55);
+    --bg-card:       rgba(88, 28, 235, 0.18);
+    --bg-card-hover: rgba(109, 40, 217, 0.35);
+    --bg-eye:        rgba(88, 28, 235, 0.30);
+
+    --border-glass:  rgba(168, 85, 247, 0.20);
+    --border-active: rgba(168, 85, 247, 0.60);
+
+    --text-main:  #f5f3ff;
+    --text-muted: #c4b5fd;
+    --text-dim:   #a78bfa;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0) !important;
+    background-color: transparent !important;
+    font-family: var(--font-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ─── Target Container ─────────────────────────────────────────────────────── */
+#target-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ─── Center Reticle Eye ──────────────────────────────────────────────────── */
+.target-eye-wrapper {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.eye-outer-ring {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px dashed rgba(168, 85, 247, 0.35);
+    transition: all 0.3s ease;
+    animation: rotateSlow 12s linear infinite;
+}
+
+.eye-spin-ring {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--bucu-purple);
+    border-right-color: var(--bucu-fuchsia);
+    opacity: 0.7;
+    animation: rotateFast 3s linear infinite;
+    transition: all 0.3s ease;
+}
+
+.eye-core {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    background: var(--bg-eye);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    box-shadow: 0 0 16px var(--bucu-purple-glow), inset 0 1px 0 rgba(255,255,255,0.10);
+    transition: all 0.25s ease;
+    border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+/* Locked-on Target Active State */
+.target-eye-wrapper.has-target {
+    transform: scale(1.15);
+}
+
+.target-eye-wrapper.has-target .eye-outer-ring {
+    border: 1.5px solid var(--bucu-emerald);
+    box-shadow: 0 0 18px var(--bucu-emerald-glow), 0 0 8px var(--bucu-purple-glow);
+    animation: pulseRing 1.5s ease-in-out infinite;
+}
+
+.target-eye-wrapper.has-target .eye-spin-ring {
+    border-top-color: var(--bucu-emerald);
+    border-right-color: var(--bucu-purple);
+    opacity: 1;
+}
+
+.target-eye-wrapper.has-target .eye-core {
+    background: rgba(88, 28, 235, 0.40);
+    color: #a78bfa;
+    box-shadow: 0 0 22px var(--bucu-purple-glow), 0 0 10px var(--bucu-emerald-glow);
+    border-color: var(--bucu-purple);
+}
+
+/* ─── Target Menu (Fanning out to the right) ───────────────────────────────── */
+.target-menu {
+    position: absolute;
+    left: calc(50% + 44px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 295px;
+    background: var(--bg-menu);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-active);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow:
+        0 16px 40px rgba(60, 20, 120, 0.55),
+        0 0 24px var(--bucu-purple-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    pointer-events: auto;
+    animation: slideInRight 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.target-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.target-badge {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--bucu-purple);
+    text-transform: uppercase;
+    text-shadow: 0 0 10px var(--bucu-purple-glow);
+}
+
+.target-hint {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+/* Options List */
+.target-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.target-option-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.target-option-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--bucu-purple);
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(88, 28, 235, 0.35), inset 0 0 12px rgba(168, 85, 247, 0.12);
+}
+
+.target-option-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.target-option-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(139, 92, 246, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bucu-purple);
+    font-size: 13px;
+}
+
+.target-option-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: 0.2px;
+}
+
+.target-option-key {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+}
+
+.target-option-card:hover .target-option-key {
+    background: var(--bucu-purple);
+    color: #fff;
+    border-color: var(--bucu-purple);
+    box-shadow: 0 0 8px var(--bucu-purple-glow);
+}
+
+/* ─── Animations ───────────────────────────────────────────────────────────── */
+@keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes rotateFast {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulseRing {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translate(-10px, -50%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, -50%);
+    }
+}
